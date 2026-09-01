@@ -1,0 +1,37 @@
+[project]
+name = "reachout-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "laporkka", email = "alexsolodkiy2008@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "aioredis>=2.0.1",
+    "alembic>=1.19.1",
+    "asyncpg>=0.31.0",
+    "celery>=5.6.3",
+    "fastapi>=0.141.1",
+    "httpx>=0.28.1",
+    "jose[cryptography]>=1.0.0",
+    "passlib[bcrypt]>=1.7.4",
+    "pika>=1.4.4",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy>=2.0.52",
+    "uvicorn[standard]>=0.52.4",
+]
+
+[project.scripts]
+reachout-api = "reachout_api:main"
+
+[build-system]
+requires = ["uv_build>=0.12.8,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
