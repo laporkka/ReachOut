@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.models.base import Base
+from reachout.src.models.base import Base
 
 if TYPE_CHECKING:
-    from src.models.user import Manager
-    from src.models.campaign import Campaign
+    from reachout.src.models.user import Manager
+    from reachout.src.models.campaign import Campaign
 
 
 class Template(Base):

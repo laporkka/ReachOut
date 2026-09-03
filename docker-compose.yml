@@ -52,7 +52,7 @@ services:
       dockerfile: Dockerfile
     container_name: reachout_api
     working_dir: /app
-    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app
+    command: uvicorn reachout.src.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app
     ports:
       - "8000:8000"
     volumes:

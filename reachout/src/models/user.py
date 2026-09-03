@@ -3,12 +3,12 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, timezone
 
-from src.models.base import Base
+from reachout.src.models.base import Base
 
 if TYPE_CHECKING:
-    from src.models.contact import Contact
-    from src.models.template import Template
-    from src.models.campaign import Campaign
+    from reachout.src.models.contact import Contact
+    from reachout.src.models.template import Template
+    from reachout.src.models.campaign import Campaign
 
 
 class Manager(Base):

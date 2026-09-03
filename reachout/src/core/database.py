@@ -1,7 +1,7 @@
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
-from src.core.config import settings
+from reachout.src.core.config import settings
 
 
 engine = create_async_engine(settings.POSTGRES_URL, echo=True)

@@ -4,11 +4,11 @@ from sqlalchemy import ForeignKey, String, Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, timezone
 
-from src.models.base import Base
+from reachout.src.models.base import Base
 
 if TYPE_CHECKING:
-    from src.models.user import Manager
-    from src.models.template import Template
+    from reachout.src.models.user import Manager
+    from reachout.src.models.template import Template
 
 
 class StatusEnum(Enum):
