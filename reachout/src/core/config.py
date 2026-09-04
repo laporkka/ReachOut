@@ -32,6 +32,10 @@ class Settings(BaseSettings):
     def RABBITMQ_URL(self) -> str:
         return f"amqp://{self.RABBITMQ_USER}:{self.RABBITMQ_PASSWORD}@{self.RABBITMQ_HOST}:{self.RABBITMQ_PORT}//"
 
+    @property
+    def REDIS_URL(self) -> str:
+        return f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}/0"
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 
