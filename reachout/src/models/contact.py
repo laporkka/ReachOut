@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlalchemy import ForeignKey, String, ARRAY
+from sqlalchemy import ForeignKey, String, ARRAY, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, timezone
 
@@ -18,6 +18,6 @@ class Contact(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     birthday: Mapped[str] = mapped_column(String(255), nullable=False)
     tags: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default_factory=lambda: datetime.now(timezone.utc), init=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True),default_factory=lambda: datetime.now(timezone.utc), init=False)
     
     manager: Mapped["Manager"] = relationship("Manager", back_populates="contacts", init=False)

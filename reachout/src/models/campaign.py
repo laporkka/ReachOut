@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from enum import Enum
-from sqlalchemy import ForeignKey, String, Enum as SAEnum
+from sqlalchemy import ForeignKey, DateTime, String, Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, timezone
 
@@ -25,7 +25,7 @@ class Campaign(Base):
     template_id: Mapped[int] = mapped_column(ForeignKey("templates.id", ondelete="CASCADE"), nullable=False)
     target_tag: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    scheduled_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     status: Mapped[StatusEnum] = mapped_column(SAEnum(StatusEnum), default=StatusEnum.PENDING, nullable=False)
     total_recipients: Mapped[int] = mapped_column(default=0)
     sent_successfully: Mapped[int] = mapped_column(default=0)
