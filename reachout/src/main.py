@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from reachout.src.core.config import settings
 from reachout.src.api.v1.auth import router as auth_router
+from reachout.src.api.v1.contacts import router as contact_router
 
 
 app = FastAPI(
@@ -21,6 +22,7 @@ app.add_middleware(
 
 
 app.include_router(auth_router)
+app.include_router(contact_router)
 
 
 @app.get("/")
