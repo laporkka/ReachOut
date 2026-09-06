@@ -1,3 +1,4 @@
+import uuid
 import jose.jwt
 from pwdlib import PasswordHash
 from datetime import datetime, timezone, timedelta
@@ -24,7 +25,14 @@ def create_access_token(data: dict, expire_time: timedelta | None = None) -> str
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    payload.update({"exp": expire}) 
+    payload.update(
+        {
+            "jti": uuid.uuid4().hex,
+            "exp": expire,
+            "iat": datetime.now(timezone.utc)
+        }
+    ) 
+
 
     jwt_token = jose.jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return jwt_token
