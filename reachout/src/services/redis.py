@@ -5,7 +5,7 @@ from reachout.src.core.config import settings
 
 
 pool = ConnectionPool.from_url(
-    url=settings.REDIS_URL,
+    url=f"{settings.REDIS_URL}/0",
     max_connections=10,
     decode_responses=True
 )

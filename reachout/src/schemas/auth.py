@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 
 class ManagerCreate(BaseModel):
@@ -10,7 +10,7 @@ class ManagerResponse(BaseModel):
     id: int
     email: EmailStr
 
-    model_config = {"from_attributes": True}
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Token(BaseModel):

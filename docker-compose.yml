@@ -73,7 +73,7 @@ services:
       dockerfile: Dockerfile
     container_name: reachout_worker
     working_dir: /app
-    command: celery -A src.tasks.celery_app:celery_app worker -l info
+    command: celery -A reachout.src.tasks.celery_app:celery_app worker -l info
     volumes:
       - .:/app
     env_file:
@@ -92,7 +92,7 @@ services:
       dockerfile: Dockerfile
     container_name: reachout_beat
     working_dir: /app
-    command: celery -A src.tasks.celery_app:celery_app beat -l info
+    command: celery -A reachout.src.tasks.celery_app:celery_app beat -l info
     volumes:
       - .:/app
     env_file:
