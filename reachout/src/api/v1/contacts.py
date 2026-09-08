@@ -11,7 +11,7 @@ from reachout.src.services.contact import ContactService
 router = APIRouter(prefix="/contacts", tags=["Contacts"])
 
 
-@router.post("/", response_model=dict, status_code=status.HTTP_200_OK)
+@router.post("/add/contacts", response_model=dict, status_code=status.HTTP_200_OK)
 async def add_list_of_contacts(
     contacts_in: ContactBulkUpload,
     current_user: Manager = Depends(get_current_user),

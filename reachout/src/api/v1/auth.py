@@ -14,6 +14,7 @@ from reachout.src.api.dependencies import get_current_user
 from reachout.src.services.redis import get_redis
 from reachout.src.core.config import settings
 
+
 router = APIRouter(prefix="/managers", tags=["Managers"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/managers/login")
