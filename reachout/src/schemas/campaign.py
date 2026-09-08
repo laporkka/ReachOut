@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
-from src.models.campaign import StatusEnum
+
+from reachout.src.models.campaign import StatusEnum
 
 class CampaignCreate(BaseModel):
     template_id: int = Field(..., description="The unique database ID of the message template to send")

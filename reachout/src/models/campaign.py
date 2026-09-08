@@ -31,7 +31,7 @@ class Campaign(Base):
     sent_successfully: Mapped[int] = mapped_column(default=0)
 
     id: Mapped[int] = mapped_column(primary_key=True, init=False)
-    created_at: Mapped[datetime] = mapped_column(default_factory=lambda: datetime.now(timezone.utc), init=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default_factory=lambda: datetime.now(timezone.utc), init=False)
         
     manager: Mapped["Manager"] = relationship("Manager", back_populates="campaigns", init=False)
     template: Mapped["Template"] = relationship("Template", back_populates="campaigns", init=False)
