@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List
 
 from reachout.src.api.dependencies import get_current_user
 from reachout.src.models.user import Manager
@@ -31,3 +32,11 @@ class TemplateService:
         await self.db.refresh(new_template)
 
         return new_template
+
+
+    async def get_all_templates(self, manager_id: int) -> List[TemplateResponse]:
+        query = select(Template)
+        result = await self.db.execute(query)
+        templates = result.scalars().all()
+
+        return templates
