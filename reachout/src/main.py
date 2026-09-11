@@ -1,11 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from reachout.src.core.config import settings
 from reachout.src.api.v1.auth import router as auth_router
 from reachout.src.api.v1.contacts import router as contact_router
 from reachout.src.api.v1.campaigns import router as campaign_router
 from reachout.src.api.v1.template import router as template_router
+
+from reachout.src.core.config import settings
 
 
 app = FastAPI(

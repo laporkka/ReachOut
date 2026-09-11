@@ -21,3 +21,13 @@ async def add_template(
     template = await TemplateService(db=db).add_new_template(payload=payload, manager_id=current_user.id)
 
     return template
+
+
+@router.get("/get/templates", response_model=list[TemplateResponse], status_code=status.HTTP_200_OK)
+async def get_all_templates(
+    current_user: Manager = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    all_templates = await TemplateService(db).get_all_templates(current_user.id)
+
+    return all_templates
