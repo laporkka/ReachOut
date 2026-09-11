@@ -1,5 +1,6 @@
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from redis.asyncio import Redis
 
 from reachout.src.schemas.campaign import CampaignCreate
 from reachout.src.models.campaign import Campaign, StatusEnum
@@ -8,8 +9,9 @@ from reachout.src.tasks.celery_app import celery_app
 
 
 class CampaignService:
-    def __init__(self, db: AsyncSession):
+    def __init__(self, db: AsyncSession, redis_cli: Redis):
         self.db = db
+        self.redis_cli = redis_cli
 
 
     async def add_task(self, payload: CampaignCreate, manager_id: int):
@@ -34,5 +36,7 @@ class CampaignService:
             "src.tasks.campaign_tasks.send_mass_email_task",
             kwargs={"campaign_id": new_campaign.id}
         )
+
+        await self.redis_cli.delete(f"analytics:dashboard:{manager_id}")
 
         return new_campaign

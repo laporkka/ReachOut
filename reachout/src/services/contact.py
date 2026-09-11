@@ -1,13 +1,15 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from redis.asyncio import Redis
 
 from reachout.src.models.contact import Contact
 from reachout.src.schemas.contact import ContactBulkUpload, ContactCreate
 
 
 class ContactService:
-    def __init__(self, db: AsyncSession):
+    def __init__(self, db: AsyncSession, redis_cli: Redis):
         self.db = db
+        self.redis_cli = redis_cli
 
 
     async def bulk_create_contacts(self, payload: ContactBulkUpload, manager_id: int) -> dict:
@@ -42,4 +44,6 @@ class ContactService:
         inserted_count = len(new_contacts)
         skipped_count = total_incoming - inserted_count
 
+        await self.redis_cli.delete(f"analytics:dashboard:{manager_id}")
+        
         return {"inserted": inserted_count, "skipped": skipped_count}

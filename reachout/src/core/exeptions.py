@@ -32,3 +32,5 @@ class InvalidCredentialsError(HTTPException):
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"}
         )
+
+

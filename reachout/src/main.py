@@ -6,6 +6,7 @@ from reachout.src.api.v1.auth import router as auth_router
 from reachout.src.api.v1.contacts import router as contact_router
 from reachout.src.api.v1.campaigns import router as campaign_router
 from reachout.src.api.v1.template import router as template_router
+from reachout.src.api.v1.analytics import router as analytic_router
 
 from reachout.src.core.config import settings
 
@@ -29,6 +30,7 @@ app.include_router(auth_router)
 app.include_router(contact_router)
 app.include_router(campaign_router)
 app.include_router(template_router)
+app.include_router(analytic_router)
 
 
 @app.get("/")
