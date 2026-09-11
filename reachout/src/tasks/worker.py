@@ -8,7 +8,7 @@ from reachout.src.models.campaign_log import Campaign_log
 
 
 @celery_app.task(name="src.tasks.campaign_tasks.send_mass_email_task")
-def send_mass_email_task(campaign_id):
+def send_mass_email_task(campaign_id: int):
     with SessionLocal() as db:
         query = select(Campaign).filter(Campaign.id == campaign_id)
         result = db.execute(query)

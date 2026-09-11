@@ -1,4 +1,5 @@
 from celery import Celery
+from celery.schedules import crontab
 
 from reachout.src.core.config import settings
 
@@ -22,3 +23,10 @@ celery_app.conf.update(
 
 celery_app.autodiscover_tasks(["reachout.src.tasks"])
 
+
+celery_app.conf.beat_schedule = {
+    "daily-birthday-check": {
+        "task": "src.tasks.scheduled.check_birthdays_task", 
+        "schedule": crontab(hour=9, minute=0),
+    }
+}
