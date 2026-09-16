@@ -40,3 +40,19 @@ class CampaignService:
         await self.redis_cli.delete(f"analytics:dashboard:{manager_id}")
 
         return new_campaign
+
+
+    async def get_all_campaigns(self, manager_id: int):
+        query = select(Campaign).filter(Campaign.manager_id == manager_id)
+        result = await self.db.execute(query)
+        campaigns = result.scalars().all()
+
+        return campaigns
+
+
+    async def get_campaign_by_id(self, campaign_id: int, manager_id: int):
+        query = select(Campaign).filter(Campaign.id == campaign_id, Campaign.manager_id == manager_id)
+        result = await self.db.execute(query)
+        campaign = result.scalar_one_or_none()
+
+        return campaign

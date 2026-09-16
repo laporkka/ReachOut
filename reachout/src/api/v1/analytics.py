@@ -17,6 +17,6 @@ async def get_analytics(
     current_user: Manager = Depends(get_current_user),
     redis_cli: Redis = Depends(get_redis)
 ):
-    response = await AnalyticService(db, redis_cli).get_manager_analytics(current_user.id)
+    response = await AnalyticService(db, redis_cli).get_manager_analytics(manager_id=current_user.id)
 
     return response

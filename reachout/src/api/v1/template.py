@@ -18,7 +18,7 @@ async def add_template(
     current_user: Manager = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    template = await TemplateService(db=db).add_new_template(payload=payload, manager_id=current_user.id)
+    template = await TemplateService(db).add_new_template(payload=payload, manager_id=current_user.id)
 
     return template
 

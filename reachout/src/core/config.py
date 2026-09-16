@@ -40,6 +40,9 @@ class Settings(BaseSettings):
     def REDIS_URL(self) -> str:
         return f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}"
 
+    TEST_ASYNC_POSTGRES_URL: str
+
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 

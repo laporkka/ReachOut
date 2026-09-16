@@ -35,10 +35,18 @@ async def manager_login(
     return access_token
     
 
-@router.post("/logout", status_code=status.HTTP_200_OK)
+@router.post("/logout", response_model=dict, status_code=status.HTTP_200_OK)
 async def logout(
     token: str = Depends(oauth2_scheme),
     current_user: Manager = Depends(get_current_user),
-    redis_cli: Redis = Depends(get_redis)
+    redis_cli: Redis = Depends(get_redis),
+    db: AsyncSession = Depends(get_db)
 ):
-    return await AuthService().manager_logout(token, redis_cli) 
+    return await AuthService(db).manager_logout(token, redis_cli) 
+
+
+@router.get("/me", response_model=ManagerResponse, status_code=status.HTTP_200_OK)
+async def get_me(
+    current_user: Manager = Depends(get_current_user)
+):
+    return current_user

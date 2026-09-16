@@ -47,3 +47,12 @@ class ContactService:
         await self.redis_cli.delete(f"analytics:dashboard:{manager_id}")
         
         return {"inserted": inserted_count, "skipped": skipped_count}
+
+
+    async def get_all_contacts(self, manager_id: int):
+            query = select(Contact).filter(Contact.manager_id == manager_id)
+            result = await self.db.execute(query)
+            contacts = result.scalars().all()
+    
+            return contacts
+    

@@ -21,12 +21,15 @@ celery_app.conf.update(
 )
 
 
-celery_app.autodiscover_tasks(["reachout.src.tasks"])
+celery_app.conf.imports = [
+    "reachout.src.tasks.scheduled",
+    "reachout.src.tasks.worker" 
+]
 
 
 celery_app.conf.beat_schedule = {
     "daily-birthday-check": {
         "task": "src.tasks.scheduled.check_birthdays_task", 
-        "schedule": crontab(hour=9, minute=0),
+        "schedule": 60.0,
     }
 }
