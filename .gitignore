@@ -1,9 +1,11 @@
 .venv/
 .uv/
 .env
+
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.log
+
 pip-log.txt
