@@ -2,6 +2,9 @@ from celery import Celery
 from celery.schedules import crontab
 
 from reachout.src.core.config import settings
+from reachout.src.core.logging import setup_logging
+
+setup_logging()
 
 
 celery_app = Celery(

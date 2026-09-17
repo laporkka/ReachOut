@@ -9,6 +9,9 @@ from reachout.src.api.v1.template import router as template_router
 from reachout.src.api.v1.analytics import router as analytic_router
 
 from reachout.src.core.config import settings
+from reachout.src.core.logging import setup_logging
+
+setup_logging()
 
 
 app = FastAPI(

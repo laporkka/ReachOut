@@ -42,7 +42,7 @@ async def logout(
     redis_cli: Redis = Depends(get_redis),
     db: AsyncSession = Depends(get_db)
 ):
-    return await AuthService(db).manager_logout(token, redis_cli) 
+    return await AuthService(db).manager_logout(token, redis_cli, current_user.id) 
 
 
 @router.get("/me", response_model=ManagerResponse, status_code=status.HTTP_200_OK)
