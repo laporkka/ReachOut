@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from redis.asyncio import Redis
+from loguru import logger
 
 from reachout.src.models.contact import Contact
 from reachout.src.schemas.contact import ContactBulkUpload, ContactCreate
@@ -13,6 +14,10 @@ class ContactService:
 
 
     async def bulk_create_contacts(self, payload: ContactBulkUpload, manager_id: int) -> dict:
+        if not payload.items:
+             logger.error(f"Ошибка при импорте контактов для менеджера #{manager_id}: передан пустой или некорректный массив данных.")
+
+        logger.info(f"Менеджер ID: {manager_id} запустил пакетную загрузку контактов. Всего элементов в запросе: {len(payload.items)}.")
         list_of_emails: dict[str, ContactCreate] = {}
 
         for contact in payload.items:
@@ -45,14 +50,22 @@ class ContactService:
         skipped_count = total_incoming - inserted_count
 
         await self.redis_cli.delete(f"analytics:dashboard:{manager_id}")
-        
+
+        logger.success(f"Обработка импорта для менеджера #{manager_id} завершена. Успешно добавлено: {inserted_count}, пропущено дубликатов: {skipped_count}.")
         return {"inserted": inserted_count, "skipped": skipped_count}
 
 
     async def get_all_contacts(self, manager_id: int):
+            logger.info(f"Менеджер {manager_id} сделал запрос на получение всех своих клиентов.")
+
             query = select(Contact).filter(Contact.manager_id == manager_id)
             result = await self.db.execute(query)
             contacts = result.scalars().all()
-    
+
+            if contacts:
+                 logger.success(f"Успешно найдено {len(contacts)} клиентов.")
+            else:
+                 logger.info(f"Клиентов менеджера {manager_id} не найдено.")
+
             return contacts
     

@@ -2,6 +2,7 @@ import json
 from redis.asyncio import Redis
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from loguru import logger
 
 from reachout.src.models.contact import Contact
 from reachout.src.models.campaign import Campaign
@@ -14,10 +15,13 @@ class AnalyticService:
 
 
     async def get_manager_analytics(self, manager_id: int):
+        logger.info(f"Менеджер {manager_id} сделал запрос на получение статистики.")
+
         cache_key = f"analytics:dashboard:{manager_id}"
         cached_data = await self.redis_cli.get(cache_key)
 
         if cached_data:
+            logger.success("Статистика была успешна взята из кеша.")
             return json.loads(cached_data)
 
         query = select(func.count(Contact.id)).filter(Contact.manager_id == manager_id)
@@ -48,4 +52,5 @@ class AnalyticService:
             ex=300
         )
 
+        logger.success(f"Статистика успешно собрана, всего контактов: {total_contacts}, всего кампаний: {total_campaigns}, процент выполненных: {success_rate}.")
         return analytic_data

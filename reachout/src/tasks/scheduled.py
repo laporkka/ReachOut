@@ -2,6 +2,7 @@ from celery import shared_task
 from sqlalchemy import select
 from datetime import datetime, timezone
 from collections import defaultdict
+from loguru import logger
 
 from reachout.src.core.database import SessionLocal
 from reachout.src.models.contact import Contact
@@ -14,12 +15,15 @@ from reachout.src.tasks.celery_app import celery_app
 def check_birthdays_task():
     today_date = datetime.now(timezone.utc).strftime("%m-%d")
 
+    logger.info(f"Celery Beat: Запущена автоматическая проверка именинников на дату: {today_date}")
+
     with SessionLocal() as db:
         query = select(Contact).filter(Contact.birthday.like(f"%{today_date}"))
         result = db.execute(query)
         contacts = result.scalars().all()
 
         if not contacts:
+            logger.info(f"Celery Beat: На дату {today_date} именинников в базе данных не найдено. Задача завершена.")
             return
         
         manager_contacts = defaultdict(list)
@@ -33,6 +37,7 @@ def check_birthdays_task():
             template = result.scalar_one_or_none()
 
             if not template:
+                logger.info(f"Celery Beat: У менаджера {manager_id} нету шаблонов.")
                 continue
 
             new_campaign = Campaign(
@@ -51,3 +56,5 @@ def check_birthdays_task():
                 "src.tasks.campaign_tasks.send_mass_email_task",
                 kwargs={"campaign_id": new_campaign.id}
             )
+
+            logger.success(f"Celery Beat: Найдено {len(contacts)} именинников. Сгруппировано по менеджерам: {len(manager_contacts)}. Инициализирую автоматические кампании...")
