@@ -45,15 +45,29 @@ create_user_and_database "reachout_test"
 Создайте файл `.env` в корневом каталоге проекта:
 
 ```ini
+PROJECT_NAME=ReachOUT
+ENVIRONMENT=local
+DEBUG=True
+
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=reachout
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
 
-DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/reachout
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+RABBITMQ_USER=guest
+RABBITMQ_PASSWORD=guest
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+
+SECRET_KEY="MY_SUPER_SECRET_KEY"
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+
 TEST_ASYNC_POSTGRES_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/reachout_test
-
-REDIS_URL=redis://redis:6379
-RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672//
 ```
 
 ---
@@ -95,3 +109,20 @@ docker compose exec api pytest -v
 * test_manager_logout_success — интеграция с Redis, проверка мгновенного отзыва токена и блокировки повторных сессий (401 Unauthorized) [5.1].
 * test_add_contacts_success — проверка тяжелой батчевой ручки загрузки базы клиентов и фильтрации дубликатов.
 * test_add_campaign — сквозной (e2e) тест триггера рассылки с использованием `unittest.mock.patch`, доказывающий, что API гарантированно генерирует кампанию и корректно пушит задачу в Celery [5.1].
+
+
+## Архитектурные решения
+
+### Отправка писем
+Для пет-проекта реальная отправка через smtplib + личную почту 
+нецелесообразна — массовые рассылки улетают в спам-бан на ~100-м письме.
+В проде используется transactional email провайдер (Mailgun / Resend) 
+через HTTP API.
+
+В проекте реализована абстракция над провайдером:
+- `MockEmailProvider` — для dev (логирование в PostgreSQL)
+- `MailgunProvider` / `ResendProvider` — заглушка под прод
+
+Переключение — через переменную окружения `EMAIL_PROVIDER`. 
+Бизнес-логика (Celery-задачи, статусы кампаний, логи) не зависит 
+от конкретного провайдера.
